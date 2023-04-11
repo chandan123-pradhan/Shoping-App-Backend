@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const app = express();
 app.use(express.json())
-const auth_controller=require('./controllers/auth_controllers')
+const auth_controller=require('./controllers/main_controllers')
 app.use(bodyParser.urlencoded({ extended: true }));
 
 

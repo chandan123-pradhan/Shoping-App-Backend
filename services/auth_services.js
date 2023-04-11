@@ -1,10 +1,17 @@
 const { addUser } = require('../database/auth_db');
 const { validateEmail, validateMobileNumber } = require('../services/validatoin');
-const User = require('../database/config');
+// const firebase=require('firebase');
+// const db=firebase.firestore();
+const {checkEmailExists} = require('./utils')
+const firebase=require('firebase');
+const db=firebase.firestore();
+const User=db.collection('Users')
 
 
-
-async function checkRegisterValidation({ name, email, mobile_number, password }) {
+/**
+ * This 
+ */
+async function user_register({ name, email, mobile_number, password }) {
     if (validateEmail(email)) {
         if (validateMobileNumber(mobile_number)) {
 
@@ -13,7 +20,7 @@ async function checkRegisterValidation({ name, email, mobile_number, password })
             if (isExist == false) {
 
                 const snapshot = await User.get();
-                const userData = await addUser(
+                const user_data=
                     {
                         'user_id': snapshot.size + 1,
                         'name': name,
@@ -21,13 +28,17 @@ async function checkRegisterValidation({ name, email, mobile_number, password })
                         'mobile_number': mobile_number,
                         'password': password
                     }
-                );
+                
+               await User.add({user_data})
+                
 
                 return message = {
                     status: 200,
                     message: 'User registeration successfully done',
                     data: {
-                        userData
+                        name:user_data.name,
+                        email:user_data.email,
+                        mobile_number:user_data.mobile_number
                     }
                 }
             } else {
@@ -61,29 +72,8 @@ async function checkRegisterValidation({ name, email, mobile_number, password })
 
 
 
-async function checkEmailExists(email) {
-    let isExist = false;
-    await User.get()
-        .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if (email == doc.data().user_data.email) {
-                    isExist = true;
-                    return isExist;
-                }
 
-            });
-            console.log(isExist);
-
-        })
-
-        .catch((error) => {
-            console.error(error);
-        });
-    return isExist;
-}
-
-
-async function doLogin({ email, password }) {
+async function user_login({ email, password }) {
     let user;
     await User.get()
         .then((querySnapshot) => {
@@ -117,7 +107,11 @@ async function doLogin({ email, password }) {
             data: {
                 status: 200,
                 message: 'User Loggedin successfully Done.',
-                data: { user }
+                data: { 
+                    name:user.name,
+                        email:user.email,
+                        mobile_number:user.mobile_number
+                 }
             }
         }
     }
@@ -126,8 +120,11 @@ async function doLogin({ email, password }) {
 }
 
 
+
+
+
+
 module.exports = {
-    checkRegisterValidation,
-    checkEmailExists,
-    doLogin
+    user_register,
+    user_login
 }

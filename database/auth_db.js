@@ -1,7 +1,6 @@
 const express =require('express');
-const User=require('./config')
 const app=express();
-
+const User=require('./config')
 
 async function addUser(user_data){
   await User.add({user_data});
@@ -9,5 +8,5 @@ async function addUser(user_data){
 }
 
 module.exports={
-addUser
+addUser,
 }
