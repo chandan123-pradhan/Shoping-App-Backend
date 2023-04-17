@@ -3,7 +3,7 @@ const express = require("express");
 const bodyParser = require('body-parser');
 const app = express();
 app.use(express.json())
-const auth_controller=require('./controllers/main_controllers')
+const main_controller=require('./controllers/main_controllers')
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
@@ -21,4 +21,4 @@ app.listen("8080", () => {
     console.log("Server started");
 })
 
-app.use('/',auth_controller)
+app.use('/',main_controller)

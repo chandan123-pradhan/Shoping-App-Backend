@@ -39,7 +39,8 @@ async function adminLogin({ email, password }) {
                 data: { 
                     name:user.name,
                         email:user.email,
-                        mobile_number:user.mobile_number 
+                        mobile_number:user.mobile_number,
+                        user_id:user.user_id
                  }
             }
         }
